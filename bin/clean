@@ -1,28 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 set -e
 
 prog=$(basename $0)
 base_dir=$(cd $(dirname $0)/.. && pwd)
-force=false
+build_dir="$base_dir"/build
 
 usage () {
   echo "USAGE"
   echo "     $prog [-fh]"
   echo
   echo "OPTIONS"
-  echo "     -f      forcefully clean (do not prompt to remove files)"
   echo "     -h      print this message"
   echo
   echo "DESCRIPTION"
   echo "     Clean the project."
 }
 
-while getopts ":fh" opt ; do
+while getopts ":h" opt ; do
   case $opt in
-    f)
-      force=true
-      ;;
     h)
       usage
       exit
@@ -44,8 +40,5 @@ if [[ $# > 0 ]]; then
   exit 1
 fi
 
-$force && rm_args="-f" || rm_args="-i"
-echo "cleaning publish"
-rm -r $rm_args $base_dir/publish || true
-echo "cleaning IZR files"
-rm $rm_args $base_dir/*.izr || true
+echo "cleaning build dir"
+rm -rf "$build_dir"
